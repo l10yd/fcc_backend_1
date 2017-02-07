@@ -9,6 +9,7 @@
   "author": "l10yd",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.14.1"
+    "express": "^4.14.1",
+    "request-ip": "^1.2.3"
   }
 }
