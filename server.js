@@ -6,6 +6,11 @@ var moment = require("moment")
 var app = express()
 var u, t;
 
+
+app.set('port', (process.env.PORT || 5000));
+
+
+
 app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname + '/index.html'));
 });
@@ -31,6 +36,6 @@ app.get('/:id', function (req, res) {
    res.send(obj)
 })
 
-app.listen(8080, function () {
-
-})
+app.listen(app.get('port'), function() {
+  console.log('Node app is running on port', app.get('port'));
+});
