@@ -1,9 +1,9 @@
 var express = require("express");
-var path = require("path")
+var path = require("path");
 var requestIp = require('request-ip');
 var os = require('os');
 
-var app = express()
+var app = express();
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -45,7 +45,7 @@ app.get('/api/whoami', function (req, res) {
     }
     res.send(obj);
 
-})
+});
 
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
