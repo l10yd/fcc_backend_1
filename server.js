@@ -1,52 +1,36 @@
 var express = require("express");
-var path = require("path");
-var requestIp = require('request-ip');
-var os = require('os');
+var path = require("path")
+var strftime = require('strftime')
+var moment = require("moment")
 
-var app = express();
-
-app.set('port', (process.env.PORT || 5000));
-
-function software(request) {
-    var ua = request.headers['user-agent'],
-    $ = {};
-    
-    if (/mobile/i.test(ua)) $.Mobile = true;
-    
-    if (/like Mac OS X/.test(ua)) {
-        $.iOS = /CPU( iPhone)? OS ([0-9\._]+) like Mac OS X/.exec(ua)[2].replace(/_/g, '.');
-        $.iPhone = /iPhone/.test(ua);
-        $.iPad = /iPad/.test(ua);
-        
-    }
-    
-    if (/Android/.test(ua)) $.Android = /Android ([0-9\.]+)[\);]/.exec(ua)[1];
-    
-    if (/webOS\//.test(ua)) $.webOS = /webOS\/([0-9\.]+)[\);]/.exec(ua)[1];
-    
-    if (/(Intel|PPC) Mac OS X/.test(ua)) $.Mac = /(Intel|PPC) Mac OS X ?([0-9\._]*)[\)\;]/.exec(ua)[2].replace(/_/g, '.') || true;
-    
-    if (/Windows NT/.test(ua)) $.Windows = /Windows NT ([0-9\._]+)[\);]/.exec(ua)[1];
-    
-    return $;
-    
-}
-
+var app = express()
+var u, t;
 
 app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname + '/index.html'));
 });
 
-app.get('/api/whoami', function (req, res) {
-    var obj = {
-        "ipadress": requestIp.getClientIp(req),
-        "language": req.headers['accept-language'],
-        "sowtware": software(req)
-    }
-    res.send(obj);
+app.get('/:id', function (req, res) {
+  var time = req.params.id;
+  if(/^\d+$/.test(time)) {
+    u = parseInt(time,10);
+    t = strftime('%B %d, %Y', new Date(u));
+  }
+  else if(moment(time.replace(/%20/gi, ' '), 'MMMM DD, YYYY', true).isValid()) {
+    t = moment(time.replace(/%20/gi, ' ').replace(/,/g, '')).format("LL");
+    u = moment(t).unix();
+  }
+  else {
+    t = null;
+    u = null;
+  }
+  var obj = {
+    unix: u,
+    natural: t
+  }
+   res.send(obj)
+})
 
-});
+app.listen(8080, function () {
 
-app.listen(app.get('port'), function() {
-  console.log('Node app is running on port', app.get('port'));
-});
+})

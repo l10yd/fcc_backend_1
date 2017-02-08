@@ -1,5 +1,5 @@
 {
-  "name": "headerparser",
+  "name": "timestamp",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,7 +9,7 @@
   "author": "l10yd",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.14.1",
-    "request-ip": "^1.2.3"
+    "express": "^4.14.0",
+    "moment": "^2.17.1"
   }
 }
